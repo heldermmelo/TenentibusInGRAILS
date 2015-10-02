@@ -3,6 +3,8 @@ package br.net.tenentibus
 class Apartamento {
 	
 	String apartamento
+	String toString(){apartamento}
+	
 
 	static hasmany = [morador:Morador]
 	

@@ -4,6 +4,7 @@ class Bloco {
 	
 	
 	String nome
+	String toString(){nome}
 	
 	static hasmany = [morador:Morador]
 	

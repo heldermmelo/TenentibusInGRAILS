@@ -22,7 +22,7 @@ class Morador {
 	 nome nullable:false, blank:false	
 	 apartamento nullable:false
 	 bloco nullable:false
-	 condonimio nullable:false
+	 condominio nullable:false
 	
 		      
 	 
