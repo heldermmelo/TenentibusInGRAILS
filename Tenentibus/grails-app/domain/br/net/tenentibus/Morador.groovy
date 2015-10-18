@@ -14,6 +14,9 @@ class Morador {
 	Bloco bloco
 	Condominio condominio
 	
+	String toString(){nome}
+	
+	
 	
 	
 		
