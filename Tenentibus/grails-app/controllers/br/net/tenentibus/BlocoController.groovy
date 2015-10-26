@@ -5,6 +5,8 @@ package br.net.tenentibus
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
 
+import grails.plugin.springsecurity.annotation.Secured;
+@Secured(["hasAnyRole('ROLE_ADMIN','ROLE_SINDICO') and isFullyAuthenticated()"])
 @Transactional(readOnly = true)
 class BlocoController {
 

@@ -123,32 +123,36 @@ log4j.main = {
 grails.plugin.springsecurity.userLookup.userDomainClassName = 'br.net.tenentibus.Usuarios'
 grails.plugin.springsecurity.userLookup.authorityJoinClassName = 'br.net.tenentibus.UsuariosPermissao'
 grails.plugin.springsecurity.authority.className = 'br.net.tenentibus.Permissao'
+//adicionado do RVD
+grails.plugin.springsecurity.securityConfigType = 'Annotation'
 
-
-grails.plugin.springsecurity.auth.loginFormUrl = '/oauth/confirm_access'
+/*grails.plugin.springsecurity.auth.loginFormUrl = '/areaRestrita/logar'
 grails.plugin.springsecurity.logout.afterLogoutUrl = '/areaRestrita/logout'
-grails.plugin.springsecurity.successHandler.defaultTargetUrl ='/oauth/confirm_access' 
-grails.plugin.springsecurity.failureHandler.defaultFalureUrl = '/oauth/error'
+grails.plugin.springsecurity.successHandler.defaultTargetUrl = '/areaRestrita/logar' 
+grails.plugin.springsecurity.failureHandler.defaultFalureUrl = '/areaRestrita/error'
 grails.plugin.springsecurity.sucessHandler.alwaysUseDefault = false
 grails.plugin.springsecurity.failureHandler.dao.hideUserNotFoundExceptions = false
 grails.plugin.springsecurity.adh.errorPage = "/j_spring_security_logout"
 grails.plugin.springsecurity.password.algorithm = 'SHA-256'
+*/
 
+//grails.plugin.springsecurity.securityConfigType = "InterceptUrlMap"
 
-grails.plugin.springsecurity.securityConfigType = "InterceptUrlMap"
+/*
 
 grails.plugin.springsecurity.InterceptUrlMap = [
-         '/areaRestrita/logar':         ['ADMIN','SECRETARIO','SINDICO','MORADOR'],
-	     '/morador/index':              ['ADMIN','SECRETARIO','SINDICO'],
-		 '/bloco/index':                ['ADMIN','SECRETARIO','SINDICO'],
-		 '/apartamento/index':          ['ADMIN','SECRETARIO','SINDICO'],
-		 '/condominio/index':           ['ADMIN','SECRETARIO','SINDICO'],
-		 '/usuariosPermissao/index':           ['ADMIN','SECRETARIO','SINDICO'],
+         '/areaRestrita/logar':         ['ROLE_ADMIN','ROLE_SECRETARIO','ROLE_SINDICO','ROLE_MORADOR'],
+	     '/morador/index':              ['ROLE_ADMIN','ROLE_SECRETARIO','ROLE_SINDICO'],
+		 '/bloco/index':                ['ROLE_ADMIN','ROLE_SINDICO'],
+		 '/apartamento/index':          ['ROLE_ADMIN','ROLE_SINDICO'],
+		 '/condominio/index':           ['ROLE_ADMIN','ROLE_SINDICO'],
+		 '/usuariosPermissao/index':    ['ADMIN','SECRETARIO','SINDICO'],
 	     '/**':                         ['IS_AUTHENTICATED_ANONYMOUSLY','MORADOR']
+		 
 
 	]
 
-
+*/
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/':                ['permitAll'],
 	'/index':           ['permitAll'],
@@ -157,6 +161,8 @@ grails.plugin.springsecurity.controllerAnnotations.staticRules = [
 	'/**/js/**':        ['permitAll'],
 	'/**/css/**':       ['permitAll'],
 	'/**/images/**':    ['permitAll'],
-	'/**/favicon.ico':  ['permitAll']
+	'/**/favicon.ico':  ['permitAll'],
+	'/areaRestrita/logar':         ['ROLE_ADMIN','ROLE_SECRETARIO','ROLE_SINDICO','ROLE_MORADOR'],
+	'/dbdoc/**':        ['ROLE_ADMIN']
 ]
 

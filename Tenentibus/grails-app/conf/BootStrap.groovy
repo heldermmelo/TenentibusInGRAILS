@@ -5,30 +5,32 @@ import br.net.tenentibus.UsuariosPermissao;
 class BootStrap {
 
     def init = { servletContext ->
-	
+		
+		criaRoles()
+		criaUser()
 			
-	  Permissao admin = Permissao.findByAuthority("ADMIN")	
+	  Permissao admin = Permissao.findByAuthority("ROLE_ADMIN")	
 	  if (admin==null) {
 		  
-		  admin = new Permissao(authority:"ADMIN").save(flush:true)
+		  admin = new Permissao(authority:"ROLE_ADMIN").save(flush:true)
 	  }
 	  
-	  Permissao sindico = Permissao.findByAuthority("SINDICO")
-	  if (admin==null) {
+	  Permissao sindico = Permissao.findByAuthority("ROLE_SINDICO")
+	  if (sindico==null) {
 		  
-		  admin = new Permissao(authority:"SINDICO").save(flush:true)
+		  sindico = new Permissao(authority:"ROLE_SINDICO").save(flush:true)
 	  }
 	  
-	  Permissao secretario = Permissao.findByAuthority("SECRETARIO")
-	  if (admin==null) {
+	  Permissao secretario = Permissao.findByAuthority("ROLE_SECRETARIO")
+	  if (secretario==null) {
 		  
-		  admin = new Permissao(authority:"SECRETARIO").save(flush:true)
+		 secretario = new Permissao(authority:"ROLE_SECRETARIO").save(flush:true)
 	  }
 	  
-	  Permissao morador = Permissao.findByAuthority("MORADOR")
-	  if (admin==null) {
+	  Permissao morador = Permissao.findByAuthority("ROLE_MORADOR")
+	  if (morador==null) {
 		  
-		  admin = new Permissao(authority:"MORADOR").save(flush:true)
+		  morador = new Permissao(authority:"ROLE_MORADOR").save(flush:true)
 	  }
 	  
 	  Usuarios administrador = Usuarios.findByUsername("administrador")
@@ -48,7 +50,7 @@ class BootStrap {
 	  }
 	  
 	  Usuarios m = Usuarios.findByUsername("morador")
-	  if (sindico==null){
+	  if (m==null){
 		  
 		  m = new Usuarios(username:"morador",password:"123",
 									   enable:true,accountExpired:false,accountLocked:false,
@@ -64,6 +66,32 @@ class BootStrap {
 	
 
     }	
+	
+	def criaUser() {
+		def adminRole = Permissao.findByAuthority('ROLE_ADMIN') ?: new Permissao(authority: 'ROLE_ADMIN').save(failOnError: true)
+
+		def adminUser = Usuarios.findByUsername('admin') ?: new Usuarios(
+				username: 'admin',
+				password: 'admin',
+				email: 'admin@lesteti.com.br',
+				enabled: true).save(failOnError: true)
+
+		if (!adminUser.authorities.contains(adminRole)) {
+			UsuariosPermissao.create adminUser, adminRole
+		}
+
+	}
+	def criaRoles() {
+		def roles = ['ROLE_ADMIN','ROLE_SINDICO','ROLE_SECRETARIO','ROLE_MORADOR']
+
+		def list = Permissao.list()
+
+		list*.authority.each {
+			if (!roles.contains(it)) new Permissao(authority: it).save()
+		}
+	}
+	
+	
 	
     def destroy = {
     }

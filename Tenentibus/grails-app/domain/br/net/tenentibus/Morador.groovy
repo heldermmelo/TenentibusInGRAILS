@@ -13,6 +13,7 @@ class Morador {
 	Apartamento apartamento
 	Bloco bloco
 	Condominio condominio
+	String cpf
 	
 	String toString(){nome}
 	
@@ -26,7 +27,7 @@ class Morador {
 	 apartamento nullable:false
 	 bloco nullable:false
 	 condominio nullable:false
-	
+	 cpf blank:false, nullable:false,cpf:true, size:14..14
 		      
 	 
 	

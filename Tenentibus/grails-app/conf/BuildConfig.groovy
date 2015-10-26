@@ -27,7 +27,9 @@ grails.project.dependency.resolver = "maven" // or ivy
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits("global") {
-        // specify dependency exclusions here; for example, uncomment this to disable ehcache:
+        
+		excludes "grails-docs" // evita conflito do itext com #jasperreports
+		// specify dependency exclusions here; for example, uncomment this to disable ehcache:
         // excludes 'ehcache'
     }
     log "error" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
@@ -48,11 +50,38 @@ grails.project.dependency.resolution = {
         //mavenRepo "http://repository.jboss.com/maven2/"
     }
 
+	
     dependencies {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes e.g.
          runtime 'mysql:mysql-connector-java:5.1.36'
         // runtime 'org.postgresql:postgresql:9.3-1101-jdbc41'
      //   test "org.grails:grails-datastore-test-support:1.0.2-grails-2.4"
+   
+		 // inclui #jasperreports
+		 
+		 
+/*		 compile('net.sf.jasperreports:jasperreports:5.6.1') {
+			 excludes 'antlr', 'commons-logging',
+					 'ant', 'mondrian', 'commons-javaflow','barbecue', 'xml-apis-ext','xml-apis', 'xalan', 'groovy-all', 'hibernate', 'saaj-api', 'servlet-api',
+					 'xercesImpl','xmlParserAPIs','spring-core','bsh', 'spring-beans', 'jaxen', 'barcode4j','batik-svg-dom','batik-xml','batik-awt-util','batik-dom',
+					 'batik-css','batik-gvt','batik-script', 'batik-svggen','batik-util','batik-bridge','persistence-api','jdtcore','bcmail-jdk16','bcprov-jdk16','bctsp-jdk16',
+					 'bcmail-jdk14','bcprov-jdk14','bctsp-jdk14','xmlbeans', 'olap4j'
+		 }
+*/		 compile "com.lowagie:itext:2.1.7"
+		 compile "org.apache.poi:poi:3.10-FINAL"
+ 
+/*		 compile('ar.com.fdvs:DynamicJasper:5.0.2') { // #dynamicjasper gera #jasperreports dinâmicos. Não precisa criar o arquivo de report.
+			 excludes 'jasperreports' // tenta baixar outra versão de #jasperreports
+		 }
+*/ 
+		 build('org.grails:grails-docs:2.4.4') {
+			 excludes 'itext' // resolve conflito de dependência do itext com o #jasperreports
+		 }
+ 
+		 
+		 
+		 
+		 
     }
 
     plugins {
@@ -64,13 +93,15 @@ grails.project.dependency.resolution = {
         // plugins for the compile step
         compile ":scaffolding:2.1.2"
         compile ':cache:1.1.8'
-        compile ":asset-pipeline:1.9.9"
+        compile ":asset-pipeline:2.1.4"
 
         // plugins needed at runtime but not for compilation
         runtime ":hibernate4:4.3.6.1" // or ":hibernate:3.6.10.18" or  ":hibernate4:4.3.6.1" original
         runtime ":database-migration:1.4.0"
         runtime ":jquery:1.11.1"
 
+		 compile":br-validation:0.3" //valida CPF, CNPJ e CEP.
+		
         // Uncomment these to enable additional asset-pipeline capabilities
         //compile ":sass-asset-pipeline:1.9.0"
         //compile ":less-asset-pipeline:1.10.0"
