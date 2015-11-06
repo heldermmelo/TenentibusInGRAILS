@@ -94,12 +94,15 @@ grails.project.dependency.resolution = {
         compile ":scaffolding:2.1.2"
         compile ':cache:1.1.8'
         compile ":asset-pipeline:2.1.4"
-
+		compile ":grails-quick-search:0.2.3"
+//		compile ":quick-search:0.5.0" // cria um service para pesquisa genérica em classes de domínio.
+	//	compile ":hibernate-filter:0.3.2" // #multi-tenant
         // plugins needed at runtime but not for compilation
-        runtime ":hibernate4:4.3.6.1" // or ":hibernate:3.6.10.18" or  ":hibernate4:4.3.6.1" original
+       // runtime ":hibernate4:4.3.6.1" // or
+		 runtime":hibernate:3.6.10.18"// or  ":hibernate4:4.3.6.1" original
         runtime ":database-migration:1.4.0"
         runtime ":jquery:1.11.1"
-
+      
 		 compile":br-validation:0.3" //valida CPF, CNPJ e CEP.
 		
         // Uncomment these to enable additional asset-pipeline capabilities

@@ -154,11 +154,14 @@ grails.plugin.springsecurity.InterceptUrlMap = [
 
 */
 grails.plugin.springsecurity.controllerAnnotations.staticRules = [
-	'/':                ['permitAll'],
-	'/index':           ['permitAll'],
-	'/index.gsp':       ['permitAll'],
-	'/assets/**':       ['permitAll'],
-	'/**/js/**':        ['permitAll'],
+//	'/':                ['permitAll'],
+//	'/index':           ['permitAll'],
+//	'/index.gsp':       ['permitAll'],
+	'/':                              ['isAuthenticated() or isRememberMe()'],
+	'/index':                         ['isAuthenticated() or isRememberMe()'],
+	'/index.gsp':                     ['isAuthenticated() or isRememberMe()'],
+	'/assets/**':                     ['isAuthenticated() or isRememberMe()'],
+	'/**/js/**':                    ['permitAll'], 
 	'/**/css/**':       ['permitAll'],
 	'/**/images/**':    ['permitAll'],
 	'/**/favicon.ico':  ['permitAll'],

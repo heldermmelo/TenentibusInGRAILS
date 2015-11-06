@@ -2,19 +2,29 @@ package br.net.tenentibus
 
 
 
+import org.springframework.dao.DataIntegrityViolationException
+
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
+import grails.plugin.springsecurity.annotation.Secured
 
-import grails.plugin.springsecurity.annotation.Secured;
-@Secured(["hasAnyRole('ROLE_ADMIN','ROLE_SINDICO') and isFullyAuthenticated()"])
+@Secured("hasAnyRole('ROLE_ADMIN','ROLE_SINDICO')")
 @Transactional(readOnly = true)
 class BlocoController {
 
-    static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
+	def quickSearchService
+	def searchProperties = null // [:]
+	def customCriteria = {}
+
+	static allowedMethods = [save: "POST", update: "PUT", delete: "DELETE"]
 
     def index(Integer max) {
-        params.max = Math.min(max ?: 10, 100)
-        respond Bloco.list(params), model:[blocoInstanceCount: Bloco.count()]
+        params.max = Math.min(max ?: 50, 100)
+
+		def list = quickSearchService.search(domainClass: Bloco, searchParams: params,
+			searchProperties: searchProperties, query: params.q, customClosure: customCriteria)
+		
+        respond list, model:[blocoInstanceCount: list.totalCount]
     }
 
     def show(Bloco blocoInstance) {
@@ -41,7 +51,7 @@ class BlocoController {
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.created.message', args: [message(code: 'bloco.label', default: 'Bloco'), blocoInstance.id])
+                flash.message = message(code: 'default.created.message', encodeAs: 'none', args: [message(code: 'bloco.label', default: 'Bloco'), blocoInstance])
                 redirect blocoInstance
             }
             '*' { respond blocoInstance, [status: CREATED] }
@@ -68,7 +78,7 @@ class BlocoController {
 
         request.withFormat {
             form multipartForm {
-                flash.message = message(code: 'default.updated.message', args: [message(code: 'Bloco.label', default: 'Bloco'), blocoInstance.id])
+                flash.message = message(code: 'default.updated.message', encodeAs: 'none', args: [message(code: 'bloco.label', default: 'Bloco'), blocoInstance])
                 redirect blocoInstance
             }
             '*'{ respond blocoInstance, [status: OK] }
@@ -83,14 +93,26 @@ class BlocoController {
             return
         }
 
-        blocoInstance.delete flush:true
+        try {
 
-        request.withFormat {
-            form multipartForm {
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'Bloco.label', default: 'Bloco'), blocoInstance.id])
-                redirect action:"index", method:"GET"
+            blocoInstance.delete flush:true
+
+            request.withFormat {
+                form multipartForm {
+                    flash.message = message(code: 'default.deleted.message', encodeAs: 'none', args: [message(code: 'bloco.label', default: 'Bloco'), blocoInstance])
+                    redirect action:"index", method:"GET"
+                }
+                '*'{ render status: NO_CONTENT }
             }
-            '*'{ render status: NO_CONTENT }
+
+        }catch (DataIntegrityViolationException e){
+
+            request.withFormat {
+                form multipartForm {
+                    flash.alert = message(code: 'error.violacao.integridade', encodeAs: 'none', args: [message(code: 'bloco.label', default: 'Bloco'), blocoInstance])
+                    redirect blocoInstance
+                }
+            }
         }
     }
 
