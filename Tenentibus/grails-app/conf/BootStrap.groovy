@@ -64,7 +64,7 @@ class BootStrap {
 		new UsuariosPermissao(Usuarios:administrador, Permissao: admin).save(flush:true)
 	}
 	
-
+    
     }	
 	
 	def criaUser() {
